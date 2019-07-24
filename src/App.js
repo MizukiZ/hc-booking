@@ -6,15 +6,16 @@ import SectionTitle from './components/SectionTitle'
 import OptionCards from './components/OptionCard'
 import { fetchOptionsDataFromApi } from './store/actions/index'
 
+import Container from '@material-ui/core/Container';
 class App extends Component {
   render() {
     return (
-      <div className="container-fluid" >
+      <Container fixed >
         <SectionTitle title={"お客様情報"} />
         <SectionTitle title={"オプション"} />
         {this.props.options && <OptionCards options={this.props.options} />}
         <SectionTitle title={"日程"} />
-      </div>
+      </Container>
     );
   }
 

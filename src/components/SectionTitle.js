@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
+import Typography from '@material-ui/core/Typography'
 
 function SectionTitle({ title }) {
   return (
     <Fragment>
       <hr />
-      <h6 className='text-center'>{title}</h6>
+      <Typography align='center' variant='subtitle1'>{title}</Typography>
       <hr />
     </Fragment>
   );

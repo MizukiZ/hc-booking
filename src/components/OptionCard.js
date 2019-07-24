@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,7 +13,7 @@ const styles = {
     color: '#fff'
   },
   selected: {
-    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
+    boxShadow: '1px 1px 15px 1px #000000'
   }
 };
 
@@ -47,13 +47,16 @@ function OptionCard({ options }) {
   })
 
   return (
-    <Grid container
-      spacing={2}
-      justify="center"
-      alignItems="center"
-    >
-      {optionCards}
-    </Grid>
+    <Fragment>
+      <Typography color='error' align='center' variant='subtitle2' style={{ minHeight: 25 }}>{!selectedOption ? '１つお選びください' : ''}</Typography>
+      <Grid container
+        spacing={2}
+        justify="center"
+        alignItems="center"
+      >
+        {optionCards}
+      </Grid>
+    </Fragment>
   );
 }
 

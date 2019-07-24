@@ -4,9 +4,9 @@ import Typography from '@material-ui/core/Typography'
 function SectionTitle({ title }) {
   return (
     <Fragment>
-      <hr />
-      <Typography align='center' variant='subtitle1'>{title}</Typography>
-      <hr />
+      <hr style={{ marginTop: 20 }} />
+      <Typography align='center' variant='subtitle1' style={{ fontWeight: "bold" }}>{title}</Typography>
+      <hr style={{ marginButton: 20 }} />
     </Fragment>
   );
 }

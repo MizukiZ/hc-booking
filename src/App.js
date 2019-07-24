@@ -3,6 +3,7 @@ import './css/App.css';
 import { connect } from 'react-redux';
 
 import SectionTitle from './components/SectionTitle'
+import OptionCards from './components/OptionCard'
 import { fetchOptionsDataFromApi } from './store/actions/index'
 
 class App extends Component {
@@ -11,6 +12,7 @@ class App extends Component {
       <div className="container-fluid" >
         <SectionTitle title={"お客様情報"} />
         <SectionTitle title={"オプション"} />
+        {this.props.options && <OptionCards options={this.props.options} />}
         <SectionTitle title={"日程"} />
       </div>
     );
@@ -24,7 +26,7 @@ class App extends Component {
 
 const mapStateToProps = function (state) {
   return {
-    options: state.optinos
+    options: state.options
   }
 }
 

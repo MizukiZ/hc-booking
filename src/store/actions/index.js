@@ -1,0 +1,1 @@
+export { fetchOptionsDataFromApi } from "./options"

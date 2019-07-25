@@ -28,7 +28,7 @@ function OptionCard({ options }) {
       <Grid item key={option.id}>
         <Card style={{
           ...styles.unSelected,
-          ...(option.title == selectedOption ? styles.selected : {})
+          ...(option.title === selectedOption ? styles.selected : {})
         }}>
           <CardActionArea
             onClick={() => {

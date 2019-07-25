@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import SectionTitle from './components/SectionTitle'
 import OptionCards from './components/OptionCard'
+import DateAndTime from './components/DateAndTime'
 import ClientInfomationForm from './components/ClientInfomationForm'
 import { fetchOptionsDataFromApi } from './store/actions/index'
 
@@ -17,6 +18,7 @@ class App extends Component {
         <SectionTitle title={"オプション"} />
         {this.props.options && <OptionCards options={this.props.options} />}
         <SectionTitle title={"日程"} />
+        <DateAndTime />
       </Container>
     );
   }

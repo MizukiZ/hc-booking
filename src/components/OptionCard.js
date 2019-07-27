@@ -6,6 +6,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography'
 
+import { connect } from 'react-redux'
+import { updateBookingOptionId } from '../store/actions/index'
+
+
 
 const styles = {
   unSelected: {
@@ -18,7 +22,7 @@ const styles = {
 };
 
 
-function OptionCard({ options }) {
+function OptionCard({ options, updateOptionId }) {
 
   // create selecttedOption valiable and change event
   let [selectedOption, setSelectedOption] = useState(null)
@@ -32,6 +36,7 @@ function OptionCard({ options }) {
         }}>
           <CardActionArea
             onClick={() => {
+              updateOptionId(option.id)
               setSelectedOption(option.title)
             }}
           >
@@ -60,4 +65,16 @@ function OptionCard({ options }) {
   );
 }
 
-export default OptionCard;
+const mapStateToProps = function (state) {
+  return {
+    bookingInfo: state.bookingInfo
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateOptionId: (optionId) => dispatch(updateBookingOptionId(optionId))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OptionCard)

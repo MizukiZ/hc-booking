@@ -4,9 +4,11 @@ import logger from "redux-logger"
 
 // import reducers
 import optionReducer from "./reducers/optionReducer"
+import bookingReducer from "./reducers/bookingReducer"
 
 const rootReducer = combineReducers({
-  options: optionReducer
+  options: optionReducer,
+  bookingInfo: bookingReducer
 })
 
 const configureStore = () => {

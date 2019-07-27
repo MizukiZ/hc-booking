@@ -4,8 +4,11 @@ import {
   Scheduler, WeekView, Appointments, Toolbar, DateNavigator
 } from "@devexpress/dx-react-scheduler-material-ui";
 
+import { connect } from 'react-redux'
+import { updateBookingDateTime } from '../store/actions/index'
 
-function DateAndTime({ options }) {
+
+function DateAndTime({ options, updateDateTime }) {
   let [currentDate, currentDateChange] = useState(new Date())
   const originalscheduleData = [
     // hold original schduleData
@@ -48,6 +51,8 @@ function DateAndTime({ options }) {
             // click event for appointment comp
 
             let apData = children[1].props.data
+            // update redux value
+            updateDateTime({ startDate: apData.startDate, endDate: apData.endDate })
             // remove chosen schedule from scheduleData
             let filterdscheduleData = originalscheduleData.filter((ap) => {
               return JSON.stringify(ap) !== JSON.stringify(apData)
@@ -92,4 +97,16 @@ function DateAndTime({ options }) {
   );
 }
 
-export default DateAndTime;
+const mapStateToProps = function (state) {
+  return {
+    bookingInfo: state.bookingInfo
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateDateTime: (datetime) => dispatch(updateBookingDateTime(datetime))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DateAndTime)

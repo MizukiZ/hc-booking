@@ -69,6 +69,7 @@ function DateAndTime({ options }) {
   return (
     <Scheduler
       data={scheduleData}
+      height={600}
     >
       <ViewState
         currentDate={currentDate}

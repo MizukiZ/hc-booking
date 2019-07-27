@@ -9,7 +9,7 @@ class CheckoutPage extends React.Component {
     return (
       <StripeProvider apiKey="pk_test_0iLQxnoMSnz8brNv1VplvgY1">
         <div className="stripeForm">
-          <h1>React Stripe Elements Example</h1>
+          <h1>お支払いページ</h1>
           <Elements>
             <CheckoutForm />
           </Elements>

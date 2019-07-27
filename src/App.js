@@ -6,6 +6,7 @@ import SectionTitle from './components/SectionTitle'
 import OptionCards from './components/OptionCard'
 import DateAndTime from './components/DateAndTime'
 import ClientInfomationForm from './components/ClientInfomationForm'
+import CheckoutPage from './components/CheckoutPage'
 import { fetchOptionsDataFromApi } from './store/actions/index'
 
 import Card from '@material-ui/core/Card';
@@ -33,6 +34,7 @@ class App extends Component {
             </Grid>
           </Grid>
         </Card>
+        <CheckoutPage />
       </Container>
     );
   }

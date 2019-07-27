@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import { updateBookingFirstName, updateBookingLastName, updateBookingEmail, updateBookingPhone, updateBookingContent } from '../store/actions/index'
 
 function ClientInfomationForm(props) {
-  console.log(props)
   const inputStyles = {
     itemGrid: {
       textAlign: 'center', margin: 'auto'

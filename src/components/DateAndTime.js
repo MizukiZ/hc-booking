@@ -52,7 +52,7 @@ function DateAndTime({ options, updateDateTime }) {
 
             let apData = children[1].props.data
             // update redux value
-            updateDateTime({ startDate: apData.startDate, endDate: apData.endDate })
+            updateDateTime(apData.startDate)
             // remove chosen schedule from scheduleData
             let filterdscheduleData = originalscheduleData.filter((ap) => {
               return JSON.stringify(ap) !== JSON.stringify(apData)

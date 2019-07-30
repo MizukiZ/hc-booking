@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
+import { connect } from 'react-redux'
+import axios from "axios"
 
 class CheckoutForm extends Component {
   constructor(props) {
@@ -9,15 +11,12 @@ class CheckoutForm extends Component {
   }
 
   async submit(ev) {
-    this.props.stripe.createToken({ name: "Name" }).then((token) => {
-      console.log(token)
+    const stripToken = await this.props.stripe.createToken({ name: "Name" })
+    let response = await axios.post("http://localhost:3000/api/v1/payments", {
+      tokenId: stripToken.token.id,
+      email: this.props.bookingInfo.email,
+      optionId: this.props.bookingInfo.optionId
     })
-
-    // let response = await fetch("/charge", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "text/plain" },
-    //   body: token.id
-    // });
 
     // if (response.ok) {
     //   this.setState({ complete: true })
@@ -35,4 +34,10 @@ class CheckoutForm extends Component {
   }
 }
 
-export default injectStripe(CheckoutForm);
+const mapStateToProps = function (state) {
+  return {
+    bookingInfo: state.bookingInfo
+  }
+}
+
+export default connect(mapStateToProps)(injectStripe(CheckoutForm))

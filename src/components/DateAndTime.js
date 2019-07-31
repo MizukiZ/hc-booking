@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { ViewState } from '@devexpress/dx-react-scheduler';
 import {
   Scheduler, WeekView, Appointments, Toolbar, DateNavigator
 } from "@devexpress/dx-react-scheduler-material-ui";
-
+import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
 import { updateBookingDateTime } from '../store/actions/index'
 
 
-function DateAndTime({ options, updateDateTime }) {
+function DateAndTime({ options, updateDateTime, bookingInfo }) {
   let [currentDate, currentDateChange] = useState(new Date())
+  let [dateIsSelected, dateIsSelectedChange] = useState(false)
+
   const originalscheduleData = [
     // hold original schduleData
     { startDate: '2019-7-21 10:00', endDate: '2019-7-21 12:00', title: 'Taken', available: false },
@@ -63,6 +65,7 @@ function DateAndTime({ options, updateDateTime }) {
             const finalizedscheduleData = [...filterdscheduleData, apData]
             // update schedule data
             updatescheduleData(finalizedscheduleData)
+            dateIsSelectedChange(true)
           }
         }}
       >
@@ -72,28 +75,31 @@ function DateAndTime({ options, updateDateTime }) {
   };
 
   return (
-    <Scheduler
-      data={scheduleData}
-      height={600}
-    >
-      <ViewState
-        currentDate={currentDate}
-        onCurrentDateChange={(date) => {
-          currentDateChange(date)
-        }}
-      />
-      <WeekView
-        // detemine which days to show (zero based. 0-Sunday 6-Saturday)
-        excludedDays={[4, 6]}
-        // set start time from admin setting
-        startDayHour={10}
-        // set end time from admin setting
-        endDayHour={19}
-      />
-      <Toolbar />
-      <DateNavigator />
-      <Appointments appointmentComponent={Appointment} />
-    </Scheduler>
+    <Fragment>
+      <Typography color='error' align='center' variant='subtitle2' style={{ minHeight: 25, fontWeight: 'bold' }}>{bookingInfo.submitError && !dateIsSelected ? 'ご希望をお１つお選びください' : ''}</Typography>
+      <Scheduler
+        data={scheduleData}
+        height={600}
+      >
+        <ViewState
+          currentDate={currentDate}
+          onCurrentDateChange={(date) => {
+            currentDateChange(date)
+          }}
+        />
+        <WeekView
+          // detemine which days to show (zero based. 0-Sunday 6-Saturday)
+          excludedDays={[4, 6]}
+          // set start time from admin setting
+          startDayHour={10}
+          // set end time from admin setting
+          endDayHour={19}
+        />
+        <Toolbar />
+        <DateNavigator />
+        <Appointments appointmentComponent={Appointment} />
+      </Scheduler>
+    </Fragment>
   );
 }
 

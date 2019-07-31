@@ -7,7 +7,7 @@ import OptionCards from './components/OptionCard'
 import DateAndTime from './components/DateAndTime'
 import ClientInfomationForm from './components/ClientInfomationForm'
 import CheckoutPage from './components/CheckoutPage'
-import { fetchOptionsDataFromApi } from './store/actions/index'
+import { fetchOptionsDataFromApi, updateSubmitFormError } from './store/actions/index'
 
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
@@ -15,10 +15,14 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 
 import { Route, withRouter } from "react-router-dom"
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 class App extends Component {
   render() {
     return (
-      <Container fixed >
+      < Container fixed >
+        <ToastContainer />
 
         {/* home path */}
         <Route path='/' exact component={() => {
@@ -36,8 +40,15 @@ class App extends Component {
                   style={styles.submitBtn}
                   variant="contained"
                   onClick={() => {
-                    // jump to payment page
-                    this.props.history.push('/payment')
+                    this.props.updateSubmitState().then(() => {
+                      if (this.props.submitError) {
+                        // submission error handling
+                        toast.error(<i style={{ fontWeight: 'bold' }}>ご入力内容をもう一度ご確認くだざい</i>)
+                      } else {
+                        // jump to payment page
+                        this.props.history.push('/payment')
+                      }
+                    })
                   }}
                 >
                   予約する
@@ -51,7 +62,7 @@ class App extends Component {
         <Route path='/payment/' component={() => {
           return <CheckoutPage />
         }} />
-      </Container>
+      </Container >
     );
   }
 
@@ -67,13 +78,16 @@ const styles = {
 
 const mapStateToProps = function (state) {
   return {
-    options: state.options
+    options: state.options,
+    submitError: state.bookingInfo.submitError,
+    formIsCompleted: state.bookingInfo.formIsCompleted
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOptions: () => dispatch(fetchOptionsDataFromApi())
+    fetchOptions: () => dispatch(fetchOptionsDataFromApi()),
+    updateSubmitState: () => dispatch(updateSubmitFormError())
   }
 }
 

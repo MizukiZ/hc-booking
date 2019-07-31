@@ -5,12 +5,16 @@ import TextField from '@material-ui/core/TextField';
 
 import { updateBookingFirstName, updateBookingLastName, updateBookingEmail, updateBookingPhone, updateBookingContent } from '../store/actions/index'
 
+import { emailIsValid, phoneIsValid } from '../helper'
+
 function ClientInfomationForm(props) {
   const inputStyles = {
     itemGrid: {
       textAlign: 'center', margin: 'auto'
     }
   }
+
+  const { firstname, lastname, email, phone, optionId, datetime, content, submitError } = props.bookingInfo
 
   return (
     <Grid
@@ -22,11 +26,13 @@ function ClientInfomationForm(props) {
 
         <Grid item xs={9} style={inputStyles.itemGrid}>
           <TextField
+            error={submitError && firstname === '' ? true : false}
+            required
             id="last-name"
             label="名字"
             margin="normal"
             type='text'
-            value={props.bookingInfo.firstname}
+            value={firstname}
             onChange={(e) => {
               const value = e.target.value
               props.updateFirstName(value)
@@ -36,11 +42,13 @@ function ClientInfomationForm(props) {
         </Grid>
         <Grid item xs={9} style={inputStyles.itemGrid}>
           <TextField
+            required
+            error={submitError && lastname === '' ? true : false}
             id="first-last"
             label="名前"
             margin="normal"
             type="text"
-            value={props.bookingInfo.lastname}
+            value={lastname}
             onChange={(e) => {
               const value = e.target.value
               props.updateLastName(value)
@@ -51,11 +59,13 @@ function ClientInfomationForm(props) {
 
         <Grid item xs={9} style={inputStyles.itemGrid}>
           <TextField
+            required
+            error={submitError && !emailIsValid(email) ? true : false}
             id="email-address"
             label="メール"
             margin="normal"
             type="email"
-            value={props.bookingInfo.email}
+            value={email}
             onChange={(e) => {
               const value = e.target.value
               props.updateEmail(value)
@@ -65,11 +75,13 @@ function ClientInfomationForm(props) {
         </Grid>
         <Grid item xs={9} style={inputStyles.itemGrid}>
           <TextField
+            required
+            error={submitError && !phoneIsValid(phone) ? true : false}
             id="phone-number"
             label="電話電話"
             margin="normal"
             type="tel"
-            value={props.bookingInfo.phone}
+            value={phone}
             onChange={(e) => {
               const value = e.target.value
               props.updatePhone(value)
@@ -90,7 +102,7 @@ function ClientInfomationForm(props) {
             margin="normal"
             variant="outlined"
             type='text'
-            value={props.bookingInfo.content}
+            value={content}
             onChange={(e) => {
               const value = e.target.value
               props.updateContent(value)

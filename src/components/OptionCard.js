@@ -22,7 +22,7 @@ const styles = {
 };
 
 
-function OptionCard({ options, updateOptionId }) {
+function OptionCard({ options, updateOptionId, bookingInfo }) {
 
   // create selecttedOption valiable and change event
   let [selectedOption, setSelectedOption] = useState(null)
@@ -53,7 +53,7 @@ function OptionCard({ options, updateOptionId }) {
 
   return (
     <Fragment>
-      <Typography color='error' align='center' variant='subtitle2' style={{ minHeight: 25 }}>{!selectedOption ? '１つお選びください' : ''}</Typography>
+      <Typography color='error' align='center' variant='subtitle2' style={{ minHeight: 25, fontWeight: 'bold' }}>{bookingInfo.submitError && !selectedOption ? 'ご希望をお１つお選びください' : ''}</Typography>
       <Grid container
         spacing={2}
         justify="center"

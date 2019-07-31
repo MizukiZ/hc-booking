@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { CardElement, injectStripe } from 'react-stripe-elements';
+import { CardNumberElement, CardExpiryElement, CardCvcElement, injectStripe } from 'react-stripe-elements';
 import { connect } from 'react-redux'
 import axios from "axios"
+import Card from '@material-ui/core/Card';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 class CheckoutForm extends Component {
   constructor(props) {
@@ -34,8 +37,22 @@ class CheckoutForm extends Component {
   render() {
     return (
       <div className="checkout">
-        <CardElement />
-        <button onClick={this.submit}>Send</button>
+        <label>
+          カード番号
+        <CardNumberElement />
+        </label>
+
+        <label>
+          有効期限
+        <CardExpiryElement />
+        </label>
+
+        <label>
+          セキュリティコード
+        <CardCvcElement />
+        </label>
+
+        <Button onClick={this.submit}>Send</Button>
       </div>
     );
   }

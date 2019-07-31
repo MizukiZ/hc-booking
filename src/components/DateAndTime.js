@@ -14,17 +14,17 @@ function DateAndTime({ options, updateDateTime, bookingInfo }) {
 
   const originalscheduleData = [
     // hold original schduleData
-    { startDate: '2019-7-21 10:00', endDate: '2019-7-21 12:00', title: 'Taken', available: false },
-    { startDate: '2019-7-26 10:00', endDate: '2019-7-26 12:00', title: 'Available', available: true },
-    { startDate: '2019-7-26 13:00', endDate: '2019-7-26 15:00', title: 'Available', available: true },
-    { startDate: '2019-7-26 15:00', endDate: '2019-7-26 17:00', title: 'Available', available: true }
+    { startDate: '2019-7-28 10:00', endDate: '2019-7-28 12:00', title: 'Taken', available: false },
+    { startDate: '2019-8-02 10:00', endDate: '2019-8-02 12:00', title: 'Available', available: true },
+    { startDate: '2019-8-02 13:00', endDate: '2019-8-02 15:00', title: 'Available', available: true },
+    { startDate: '2019-8-02 15:00', endDate: '2019-8-02 17:00', title: 'Available', available: true }
   ]
   let [scheduleData, updatescheduleData] = useState([
     // date which is generated based on the appointments and admin avilavility
-    { startDate: '2019-7-21 10:00', endDate: '2019-7-21 12:00', title: 'Taken', available: false },
-    { startDate: '2019-7-26 10:00', endDate: '2019-7-26 12:00', title: 'Available', available: true },
-    { startDate: '2019-7-26 13:00', endDate: '2019-7-26 15:00', title: 'Available', available: true },
-    { startDate: '2019-7-26 15:00', endDate: '2019-7-26 17:00', title: 'Available', available: true }
+    { startDate: '2019-7-28 10:00', endDate: '2019-7-28 12:00', title: 'Taken', available: false },
+    { startDate: '2019-8-02 10:00', endDate: '2019-8-02 12:00', title: 'Available', available: true },
+    { startDate: '2019-8-02 13:00', endDate: '2019-8-02 15:00', title: 'Available', available: true },
+    { startDate: '2019-8-02 15:00', endDate: '2019-8-02 17:00', title: 'Available', available: true }
   ])
 
   const Appointment = ({

@@ -45,6 +45,7 @@ class App extends Component {
                         // submission error handling
                         toast.error(<i style={{ fontWeight: 'bold' }}>ご入力内容をもう一度ご確認くだざい</i>)
                       } else {
+                        toast.dismiss()
                         // jump to payment page
                         this.props.history.push('/payment')
                       }

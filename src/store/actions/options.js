@@ -13,7 +13,7 @@ const fetchOptionsData = data => {
 
 export const fetchOptionsDataFromApi = () => {
   // hc api url
-  const hcApi = `http://localhost:3000/api/v1/options`
+  const hcApi = `http://hc-booking.herokuapp.com/api/v1/options`
 
   return (dispatch) => {
     axios.get(hcApi).then(response => {

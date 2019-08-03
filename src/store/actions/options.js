@@ -20,6 +20,7 @@ export const fetchOptionsDataFromApi = () => {
 
   return (dispatch) => {
     axios.get(hcApi).then(response => {
+      console.log("res", response)
       dispatch(fetchOptionsData(response.data.data))
     })
       .catch(error => {

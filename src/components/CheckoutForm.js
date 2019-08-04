@@ -10,20 +10,25 @@ import { withRouter } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import BeatLoader from 'react-spinners/BeatLoader';
+
 class CheckoutForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { complete: false };
+    this.state = { process: false };
     this.submit = this.submit.bind(this);
   }
 
   async submit(ev) {
+    this.setState({ process: true })
+
     const fullname = `${this.props.bookingInfo.firstname} ${this.props.bookingInfo.lastname}`
     const stripToken = await this.props.stripe.createToken({ name: fullname })
     const errorMessageJp = { 'incomplete_number': "カード番号をご確認ください", 'incomplete_expiry': '有効期限をご確認ください', 'invalid_expiry_year_past': '有効期限をご確認ください', 'incomplete_cvc': 'セキュリティコードをご確認ください' }
 
     // input validation errors
     if (stripToken.error) {
+      this.setState({ process: false })
       toast.error(<i style={{ fontWeight: 'bold' }}>{errorMessageJp[stripToken.error.code]}</i>)
     } else {
       // no validation errors, process
@@ -42,8 +47,8 @@ class CheckoutForm extends Component {
       })
 
       if (response.status === 200) {
-        this.setState({ complete: true })
         toast.dismiss()
+        this.setState({ process: false })
         // redirect to thank you page
         this.props.history.push('/thankyou')
       }
@@ -74,7 +79,8 @@ class CheckoutForm extends Component {
           </label>
         </Grid>
         <Grid item xs={12} style={{ textAlign: 'center' }}>
-          <Button onClick={this.submit}>お支払い</Button>
+          <Button disabled={this.state.process} onClick={this.submit}>{this.state.process ? <BeatLoader color='#fff' /> : "お支払い"}</Button>
+
         </Grid>
       </Grid>
     );

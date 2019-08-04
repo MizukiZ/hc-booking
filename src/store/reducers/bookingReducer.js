@@ -6,7 +6,8 @@ import {
   UPDATE_BOOKING_CONTENT,
   UPDATE_BOOKING_OPTION_ID,
   UPDATE_BOOKING_DATETIME,
-  UPDATE_SUBMIT_FORM_ERROR
+  UPDATE_SUBMIT_FORM_ERROR,
+  RESET_SUBMIT_FORM
 } from "../actions/actionTypes"
 
 let initialBookingState =
@@ -56,6 +57,10 @@ export default function optionReducer(state = initialBookingState, action) {
     case UPDATE_SUBMIT_FORM_ERROR:
       return {
         ...state, submitError: action.result, formIsCompleted: action.formCompletedResult
+      }
+    case RESET_SUBMIT_FORM:
+      return {
+        ...initialBookingState
       }
     default:
       return state

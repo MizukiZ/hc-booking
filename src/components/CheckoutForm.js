@@ -74,8 +74,8 @@ class CheckoutForm extends Component {
         <CardCvcElement />
           </label>
         </Grid>
-        <Grid item xs={12}>
-          <Button onClick={this.submit}>Send</Button>
+        <Grid item xs={12} style={{ textAlign: 'center' }}>
+          <Button onClick={this.submit}>お支払い</Button>
         </Grid>
       </Grid>
     );

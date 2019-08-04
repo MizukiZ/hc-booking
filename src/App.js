@@ -37,7 +37,7 @@ class App extends Component {
             <Grid style={{ margin: 20 }}>
               <Grid item style={{ textAlign: 'center' }}>
                 <Button
-                  style={styles.submitBtn}
+                  id='formSubmitBtn'
                   variant="contained"
                   onClick={() => {
                     this.props.updateSubmitState().then(() => {
@@ -71,10 +71,6 @@ class App extends Component {
     //initial fetch options
     this.props.fetchOptions()
   }
-}
-
-const styles = {
-  submitBtn: { width: '200px', height: '60px', fontSize: '1.5em', background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', color: '#fff' }
 }
 
 const mapStateToProps = function (state) {

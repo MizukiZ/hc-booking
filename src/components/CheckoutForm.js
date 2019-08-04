@@ -6,6 +6,9 @@ import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 class CheckoutForm extends Component {
   constructor(props) {
     super(props);
@@ -16,22 +19,37 @@ class CheckoutForm extends Component {
   async submit(ev) {
     const fullname = `${this.props.bookingInfo.firstname} ${this.props.bookingInfo.lastname}`
     const stripToken = await this.props.stripe.createToken({ name: fullname })
+    const errorMessageJp = { 'incomplete_number': "カード番号をご確認ください", 'incomplete_expiry': '有効期限をご確認ください', 'invalid_expiry_year_past': '有効期限をご確認ください', 'incomplete_cvc': 'セキュリティコードをご確認ください' }
 
-    let response = await axios.post("http://localhost:3000/api/v1/payments", {
-      tokenId: stripToken.token.id,
-      firstname: this.props.bookingInfo.firstname,
-      lastname: this.props.bookingInfo.lastname,
-      email: this.props.bookingInfo.email,
-      phone: this.props.bookingInfo.phone,
-      content: this.props.bookingInfo.content,
-      datetime: this.props.bookingInfo.datetime,
-      optionId: this.props.bookingInfo.optionId
-    })
+    // input validation errors
+    if (stripToken.error) {
+      toast.error(<i style={{ fontWeight: 'bold' }}>{errorMessageJp[stripToken.error.code]}</i>)
+    } else {
+      // no validation errors, process
 
-    if (response.status === 200) {
-      this.setState({ complete: true })
-      console.log("Purchase Complete!")
+      // hc api url
+      const localhostApi = `http://localhost:3000`
+      const productionApi = 'https://hc-booking-api.herokuapp.com'
+
+      const hcApi = process.env.NODE_ENV === "development" ? localhostApi : productionApi
+
+      let response = await axios.post(`${hcApi}/api/v1/payments`, {
+        tokenId: stripToken.token.id,
+        firstname: this.props.bookingInfo.firstname,
+        lastname: this.props.bookingInfo.lastname,
+        email: this.props.bookingInfo.email,
+        phone: this.props.bookingInfo.phone,
+        content: this.props.bookingInfo.content,
+        datetime: this.props.bookingInfo.datetime,
+        optionId: this.props.bookingInfo.optionId
+      })
+
+      if (response.status === 200) {
+        this.setState({ complete: true })
+        console.log("Appointment Complete!")
+      }
     }
+
   }
 
   render() {

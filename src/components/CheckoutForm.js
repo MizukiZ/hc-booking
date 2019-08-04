@@ -54,24 +54,30 @@ class CheckoutForm extends Component {
 
   render() {
     return (
-      <div className="checkout">
-        <label>
-          カード番号
+      <Grid container className="checkout">
+        <Grid item xs={12} sm={6}>
+          <label>
+            カード番号
         <CardNumberElement />
-        </label>
-
-        <label>
-          有効期限
+          </label>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <label>
+            有効期限
         <CardExpiryElement />
-        </label>
+          </label>
+        </Grid>
+        <Grid item xs={12} sm={6}>
 
-        <label>
-          セキュリティコード
+          <label>
+            セキュリティコード
         <CardCvcElement />
-        </label>
-
-        <Button onClick={this.submit}>Send</Button>
-      </div>
+          </label>
+        </Grid>
+        <Grid item xs={12}>
+          <Button onClick={this.submit}>Send</Button>
+        </Grid>
+      </Grid>
     );
   }
 }

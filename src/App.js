@@ -19,45 +19,58 @@ import { Route, withRouter } from "react-router-dom"
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import BeatLoader from 'react-spinners/BeatLoader';
 class App extends Component {
   render() {
     return (
       < Container fixed >
         <ToastContainer />
-
         {/* home path */}
         <Route path='/' exact component={() => {
-          return (<Card style={{ padding: 20, margin: 20 }}>
-            <SectionTitle title={"お客様情報"} />
-            <ClientInfomationForm />
-            <SectionTitle title={"オプション"} />
-            {this.props.options && <OptionCards options={this.props.options} />}
-            <SectionTitle title={"日程"} />
-            <DateAndTime />
 
-            <Grid style={{ margin: 20 }}>
-              <Grid item style={{ textAlign: 'center' }}>
-                <Button
-                  id='formSubmitBtn'
-                  variant="contained"
-                  onClick={() => {
-                    this.props.updateSubmitState().then(() => {
-                      if (this.props.submitError) {
-                        // submission error handling
-                        toast.error(<i style={{ fontWeight: 'bold' }}>ご入力内容をもう一度ご確認ください</i>)
-                      } else {
-                        toast.dismiss()
-                        // jump to payment page
-                        this.props.history.push('/payment')
-                      }
-                    })
-                  }}
-                >
-                  予約する
-                  </Button>
+          if (this.props.options) {
+            return (<Card style={{ padding: 20, margin: 20 }}>
+              <SectionTitle title={"お客様情報"} />
+              <ClientInfomationForm />
+              <SectionTitle title={"オプション"} />
+              {this.props.options && <OptionCards options={this.props.options} />}
+              <SectionTitle title={"日程"} />
+              <DateAndTime />
+
+              <Grid style={{ margin: 20 }}>
+                <Grid item style={{ textAlign: 'center' }}>
+                  <Button
+                    id='formSubmitBtn'
+                    variant="contained"
+                    onClick={() => {
+                      this.props.updateSubmitState().then(() => {
+                        if (this.props.submitError) {
+                          // submission error handling
+                          toast.error(<i style={{ fontWeight: 'bold' }}>ご入力内容をもう一度ご確認ください</i>)
+                        } else {
+                          toast.dismiss()
+                          // jump to payment page
+                          this.props.history.push('/payment')
+                        }
+                      })
+                    }}
+                  >
+                    予約する
+                    </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </Card>)
+            </Card>)
+          } else {
+            return (
+              <Grid container style={{ padding: '5em' }}>
+                <Grid item xs={12} style={{ textAlign: 'center' }}>
+                  <BeatLoader color='#36D7B7' />
+                </Grid>
+              </Grid>
+            )
+          }
+
         }} />
 
         {/* payment path */}

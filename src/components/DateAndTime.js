@@ -6,26 +6,15 @@ import {
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
 import { updateBookingDateTime } from '../store/actions/index'
-
+import moment from 'moment'
 
 function DateAndTime({ options, updateDateTime, bookingInfo }) {
+
   let [currentDate, currentDateChange] = useState(new Date())
   let [dateIsSelected, dateIsSelectedChange] = useState(false)
 
-  const originalscheduleData = [
-    // hold original schduleData
-    { startDate: '2019-7-28 10:00', endDate: '2019-7-28 12:00', title: 'Taken', available: false },
-    { startDate: '2019-8-02 10:00', endDate: '2019-8-02 12:00', title: 'Available', available: true },
-    { startDate: '2019-8-02 13:00', endDate: '2019-8-02 15:00', title: 'Available', available: true },
-    { startDate: '2019-8-02 15:00', endDate: '2019-8-02 17:00', title: 'Available', available: true }
-  ]
-  let [scheduleData, updatescheduleData] = useState([
-    // date which is generated based on the appointments and admin avilavility
-    { startDate: '2019-7-28 10:00', endDate: '2019-7-28 12:00', title: 'Taken', available: false },
-    { startDate: '2019-8-02 10:00', endDate: '2019-8-02 12:00', title: 'Available', available: true },
-    { startDate: '2019-8-02 13:00', endDate: '2019-8-02 15:00', title: 'Available', available: true },
-    { startDate: '2019-8-02 15:00', endDate: '2019-8-02 17:00', title: 'Available', available: true }
-  ])
+  const originalscheduleData = generateSchedule()
+  let [scheduleData, updatescheduleData] = useState(generateSchedule())
 
   const Appointment = ({
     children, style, ...restProps
@@ -101,6 +90,44 @@ function DateAndTime({ options, updateDateTime, bookingInfo }) {
       </Scheduler>
     </Fragment>
   );
+}
+
+function generateSchedule() {
+  let dynamicSchedule = []
+  const today = moment().format("YYYY-MM-DD")
+  const startTime = "10:00"
+  const endTime = 19
+  const duration = 2
+  const interval = 30
+  let startDatetime = new Date(today + "T" + startTime)
+
+  for (let i = 1; i < 50; i++) {
+    // random bool for debugging
+    const taken = i % 3 == 0;
+
+    const startDate = moment(startDatetime).format("YYYY-M-DD HH:mm")
+    // add hours based on admin setting  duration
+    if (startDatetime.getHours() + duration >= 19) {
+      // next day with set start time
+      startDatetime.setDate(startDatetime.getDate() + 1)
+      const nextDateStr = moment(startDatetime).format("YYYY-MM-DD")
+      startDatetime = new Date(nextDateStr + "T" + startTime)
+      continue
+    } else {
+      const endDate = moment(startDatetime.setHours(startDatetime.getHours() + duration)).format("YYYY-M-DD HH:mm")
+      let scheduleObj = {
+        startDate,
+        endDate,
+        title: taken ? "Taken" : "Available",
+        available: taken ? false : true
+      }
+
+      // add interval minutes for next session
+      startDatetime.setMinutes(startDatetime.getMinutes() + interval)
+      dynamicSchedule.push(scheduleObj)
+    }
+  }
+  return dynamicSchedule
 }
 
 const mapStateToProps = function (state) {

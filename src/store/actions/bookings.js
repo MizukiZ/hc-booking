@@ -6,12 +6,18 @@ import {
   UPDATE_BOOKING_CONTENT,
   UPDATE_BOOKING_OPTION_ID,
   UPDATE_BOOKING_DATETIME,
-  UPDATE_SUBMIT_FORM_ERROR
+  UPDATE_SUBMIT_FORM_ERROR,
+  RESET_SUBMIT_FORM
 } from "./actionTypes"
 
 import { store } from '../../index'
 import { phoneIsValid, emailIsValid } from '../../helper'
 
+export const resetSubmitForm = () => {
+  return {
+    type: RESET_SUBMIT_FORM
+  }
+}
 
 export const updateBookingFirstName = firstname => {
   return {

@@ -7,6 +7,7 @@ import OptionCards from './components/OptionCard'
 import DateAndTime from './components/DateAndTime'
 import ClientInfomationForm from './components/ClientInfomationForm'
 import CheckoutPage from './components/CheckoutPage'
+import ThankYouPage from './components/ThankYouPage'
 import { fetchOptionsDataFromApi, updateSubmitFormError } from './store/actions/index'
 
 import Card from '@material-ui/core/Card';
@@ -62,6 +63,11 @@ class App extends Component {
         {/* payment path */}
         <Route path='/payment/' component={() => {
           return <CheckoutPage />
+        }} />
+
+        {/* thank you page path */}
+        <Route path='/thankyou/' component={() => {
+          return <ThankYouPage />
         }} />
       </Container >
     );

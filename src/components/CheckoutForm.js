@@ -5,6 +5,7 @@ import axios from "axios"
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import { withRouter } from "react-router-dom"
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,20 +34,18 @@ class CheckoutForm extends Component {
 
       const hcApi = process.env.NODE_ENV === "development" ? localhostApi : productionApi
 
+      const { firstname, lastname, email, phone, content, datetime, optionId } = this.props.bookingInfo
+
       let response = await axios.post(`${hcApi}/api/v1/payments`, {
         tokenId: stripToken.token.id,
-        firstname: this.props.bookingInfo.firstname,
-        lastname: this.props.bookingInfo.lastname,
-        email: this.props.bookingInfo.email,
-        phone: this.props.bookingInfo.phone,
-        content: this.props.bookingInfo.content,
-        datetime: this.props.bookingInfo.datetime,
-        optionId: this.props.bookingInfo.optionId
+        firstname, lastname, email, phone, content, datetime, optionId
       })
 
       if (response.status === 200) {
         this.setState({ complete: true })
-        console.log("Appointment Complete!")
+        toast.dismiss()
+        // redirect to thank you page
+        this.props.history.push('/thankyou')
       }
     }
 
@@ -88,4 +87,4 @@ const mapStateToProps = function (state) {
   }
 }
 
-export default connect(mapStateToProps)(injectStripe(CheckoutForm))
+export default withRouter(connect(mapStateToProps)(injectStripe(CheckoutForm)))

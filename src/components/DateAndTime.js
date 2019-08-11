@@ -106,7 +106,7 @@ function generateSchedule(appointmentArrayMomentObjects) {
   const interval = 30
   let startDatetime = new Date(today + "T" + startTime)
 
-  for (let i = 1; i < 25; i++) {
+  for (let i = 1; i < 50; i++) {
     const startDate = moment(startDatetime).format("YYYY-M-DD HH:mm")
     if (startDatetime.getHours() + duration >= 19) {
       // next day with set start time
@@ -129,17 +129,17 @@ function generateSchedule(appointmentArrayMomentObjects) {
     }
   }
 
-  appointmentArrayMomentObjects.forEach((appointment) => {
-    const startDate = appointment.format("YYYY-M-DD HH:mm")
-    const endDate = moment(appointment).utcOffset(0).add(duration, "hours").format("YYYY-M-DD HH:mm")
-    let scheduleObj = {
-      startDate,
-      endDate,
-      title: "ご予約不可です",
-      available: false
-    }
-    dynamicSchedule.push(scheduleObj)
-  })
+  // appointmentArrayMomentObjects.forEach((appointment) => {
+  //   const startDate = appointment.format("YYYY-M-DD HH:mm")
+  //   const endDate = moment(appointment).utcOffset(0).add(duration, "hours").format("YYYY-M-DD HH:mm")
+  //   let scheduleObj = {
+  //     startDate,
+  //     endDate,
+  //     title: "ご予約不可です",
+  //     available: false
+  //   }
+  //   dynamicSchedule.push(scheduleObj)
+  // })
 
   return dynamicSchedule
 }

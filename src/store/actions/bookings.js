@@ -64,12 +64,13 @@ export const updateBookingOptionId = optionId => {
 export const updateBookingDateTime = datetime => {
   return {
     type: UPDATE_BOOKING_DATETIME,
-    datetime: datetime
+    start_at: datetime.start_at,
+    end_at: datetime.end_at
   }
 }
 
 export const updateSubmitFormError = () => (dispatch) => {
-  const { firstname, lastname, email, phone, optionId, datetime } = store.getState().bookingInfo
+  const { firstname, lastname, email, phone, optionId, start_at, end_at } = store.getState().bookingInfo
   let result = false
 
   // check the state and set result true or false
@@ -79,7 +80,8 @@ export const updateSubmitFormError = () => (dispatch) => {
     !emailIsValid(email) ||
     !phoneIsValid(phone) ||
     !optionId ||
-    !datetime) {
+    !start_at ||
+    !end_at) {
     result = true
   }
   return new Promise((resolve, reject) => {

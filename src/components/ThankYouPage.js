@@ -23,10 +23,10 @@ function ThankYouPage(props) {
             src={require('../images/logo.png')}
           />
         </Grid>
-        <Grid itme xs={12} style={{ textAlign: 'center' }}>
+        <Grid item xs={12} style={{ textAlign: 'center' }}>
           <Typography variant='h5'>ご予約ありがとうございました。</Typography>
         </Grid>
-        <Grid itme xs={12} style={{ textAlign: 'center' }}>
+        <Grid item xs={12} style={{ textAlign: 'center' }}>
           <Typography variant='subtitle2' style={{ fontStyle: 'italic' }}>ご予約確認メールを送らさせていただきました、ご確認ください。</Typography>
         </Grid>
       </Grid>

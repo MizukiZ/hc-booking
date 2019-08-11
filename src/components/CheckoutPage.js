@@ -19,7 +19,7 @@ class CheckoutPage extends React.Component {
 
   render() {
     const { options } = this.props
-    const { firstname, lastname, email, phone, optionId, datetime, content } = this.props.bookingInfo
+    const { firstname, lastname, email, phone, optionId, start_at, end_at, content } = this.props.bookingInfo
 
     return (
       <StripeProvider apiKey="pk_test_0iLQxnoMSnz8brNv1VplvgY1">
@@ -87,7 +87,7 @@ class CheckoutPage extends React.Component {
                 <ListItem>
                   <ListItemText
                     primary="日時"
-                    secondary={moment(datetime).format('YYYY年M月D日　HH時mm分')}
+                    secondary={moment(start_at).format('YYYY年M月D日　HH時mm分')}
                   />
                 </ListItem>
                 <Divider />

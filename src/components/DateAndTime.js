@@ -8,13 +8,18 @@ import { connect } from 'react-redux'
 import { updateBookingDateTime } from '../store/actions/index'
 import moment from 'moment'
 
-function DateAndTime({ options, updateDateTime, bookingInfo }) {
+function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
 
   let [currentDate, currentDateChange] = useState(new Date())
   let [dateIsSelected, dateIsSelectedChange] = useState(false)
 
-  const originalscheduleData = generateSchedule()
-  let [scheduleData, updatescheduleData] = useState(generateSchedule())
+  // crete array of appointment datetimes (moment object)
+  const appointmentDateArray = appointments ? appointments.map((a) => { return moment(a.start_at).utcOffset(0) }
+  ) : []
+
+
+  const originalscheduleData = generateSchedule(appointmentDateArray)
+  let [scheduleData, updatescheduleData] = useState(generateSchedule(appointmentDateArray))
 
   const Appointment = ({
     children, style, ...restProps
@@ -43,7 +48,7 @@ function DateAndTime({ options, updateDateTime, bookingInfo }) {
 
             let apData = children[1].props.data
             // update redux value
-            updateDateTime(apData.startDate)
+            updateDateTime({ start_at: apData.startDate, end_at: apData.endDate })
             // remove chosen schedule from scheduleData
             let filterdscheduleData = originalscheduleData.filter((ap) => {
               return JSON.stringify(ap) !== JSON.stringify(apData)
@@ -92,7 +97,7 @@ function DateAndTime({ options, updateDateTime, bookingInfo }) {
   );
 }
 
-function generateSchedule() {
+function generateSchedule(appointmentArrayMomentObjects) {
   let dynamicSchedule = []
   const today = moment().format("YYYY-MM-DD")
   const startTime = "10:00"
@@ -102,11 +107,7 @@ function generateSchedule() {
   let startDatetime = new Date(today + "T" + startTime)
 
   for (let i = 1; i < 50; i++) {
-    // random bool for debugging
-    const taken = i % 3 == 0;
-
     const startDate = moment(startDatetime).format("YYYY-M-DD HH:mm")
-    // add hours based on admin setting  duration
     if (startDatetime.getHours() + duration >= 19) {
       // next day with set start time
       startDatetime.setDate(startDatetime.getDate() + 1)
@@ -118,8 +119,8 @@ function generateSchedule() {
       let scheduleObj = {
         startDate,
         endDate,
-        title: taken ? "Taken" : "Available",
-        available: taken ? false : true
+        title: "ご予約可能です",
+        available: true
       }
 
       // add interval minutes for next session
@@ -127,12 +128,26 @@ function generateSchedule() {
       dynamicSchedule.push(scheduleObj)
     }
   }
+
+  // appointmentArrayMomentObjects.forEach((appointment) => {
+  //   const startDate = appointment.format("YYYY-M-DD HH:mm")
+  //   const endDate = moment(appointment).utcOffset(0).add(duration, "hours").format("YYYY-M-DD HH:mm")
+  //   let scheduleObj = {
+  //     startDate,
+  //     endDate,
+  //     title: "ご予約不可です",
+  //     available: false
+  //   }
+  //   dynamicSchedule.push(scheduleObj)
+  // })
+
   return dynamicSchedule
 }
 
 const mapStateToProps = function (state) {
   return {
-    bookingInfo: state.bookingInfo
+    bookingInfo: state.bookingInfo,
+    appointments: state.appointments
   }
 }
 

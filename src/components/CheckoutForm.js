@@ -39,11 +39,11 @@ class CheckoutForm extends Component {
 
       const hcApi = process.env.NODE_ENV === "development" ? localhostApi : productionApi
 
-      const { firstname, lastname, email, phone, content, datetime, optionId } = this.props.bookingInfo
+      const { firstname, lastname, email, phone, content, start_at, end_at, optionId } = this.props.bookingInfo
 
       let response = await axios.post(`${hcApi}/api/v1/payments`, {
         tokenId: stripToken.token.id,
-        firstname, lastname, email, phone, content, datetime, optionId
+        firstname, lastname, email, phone, content, start_at, end_at, optionId
       })
 
       if (response.status === 200) {

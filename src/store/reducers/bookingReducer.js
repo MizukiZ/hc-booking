@@ -18,7 +18,8 @@ let initialBookingState =
   phone: '',
   content: '',
   optionId: null,
-  datetime: null,
+  start_at: null,
+  end_at: null,
   submitError: false,
   formIsCompleted: false
 
@@ -52,7 +53,7 @@ export default function optionReducer(state = initialBookingState, action) {
       }
     case UPDATE_BOOKING_DATETIME:
       return {
-        ...state, datetime: action.datetime
+        ...state, start_at: action.start_at, end_at: action.end_at
       }
     case UPDATE_SUBMIT_FORM_ERROR:
       return {

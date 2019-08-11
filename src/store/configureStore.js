@@ -9,7 +9,7 @@ import bookingReducer from "./reducers/bookingReducer"
 
 const rootReducer = combineReducers({
   options: optionReducer,
-  appointment: appointmentReducer,
+  appointments: appointmentReducer,
   bookingInfo: bookingReducer
 })
 

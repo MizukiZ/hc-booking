@@ -96,6 +96,7 @@ class App extends Component {
 const mapStateToProps = function (state) {
   return {
     options: state.options,
+    appointments: state.appointments,
     submitError: state.bookingInfo.submitError,
     formIsCompleted: state.bookingInfo.formIsCompleted
   }

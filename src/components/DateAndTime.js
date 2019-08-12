@@ -8,13 +8,14 @@ import { connect } from 'react-redux'
 import { updateBookingDateTime } from '../store/actions/index'
 import moment from 'moment'
 
+
 function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
 
   let [currentDate, currentDateChange] = useState(new Date())
   let [dateIsSelected, dateIsSelectedChange] = useState(false)
 
   // crete array of appointment datetimes (moment object)
-  const appointmentDateArray = appointments ? appointments.map((a) => { return moment(a.start_at).utcOffset(0) }
+  const appointmentDateArray = appointments ? appointments.map((a) => { return { start_at: moment(moment(a.start_at).utcOffset(0).format("YYYY-M-DD HH:mm")), end_at: moment(moment(a.end_at).utcOffset(0).format("YYYY-M-DD HH:mm")) } }
   ) : []
 
 
@@ -99,21 +100,38 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
 
 function generateSchedule(appointmentArrayMomentObjects) {
   let dynamicSchedule = []
-  const today = moment().format("YYYY-MM-DD")
+  const tomorrow = moment().add(1, 'day').format("YYYY-MM-DD")
   const startTime = "10:00"
   const endTime = 19
   const duration = 2
-  const interval = 30
-  let startDatetime = new Date(today + "T" + startTime)
+  const interval = 15
 
-  for (let i = 1; i < 50; i++) {
+  let startDatetime = new Date(tomorrow + "T" + startTime)
+  for (let i = 1; i < 25; i++) {
+    let isOverrap = false;
     const startDate = moment(startDatetime).format("YYYY-M-DD HH:mm")
+
+    appointmentArrayMomentObjects.forEach((appointment) => {
+      const appointmentStart = appointment.start_at
+      const appointmentEnd = appointment.end_at
+      const bookingStart = moment(startDate)
+      const bookingEnd = moment(startDate).add(2, "hours")
+
+      if ((appointmentStart >= bookingStart && appointmentStart <= bookingEnd) || (appointmentEnd >= bookingStart && appointmentEnd <= bookingEnd)) {
+
+        isOverrap = true
+      }
+    })
+
     if (startDatetime.getHours() + duration >= 19) {
       // next day with set start time
       startDatetime.setDate(startDatetime.getDate() + 1)
       const nextDateStr = moment(startDatetime).format("YYYY-MM-DD")
       startDatetime = new Date(nextDateStr + "T" + startTime)
       continue
+    } else if (isOverrap) {
+      startDatetime.setHours(startDatetime.getHours() + duration)
+      startDatetime.setMinutes(startDatetime.getMinutes() + interval)
     } else {
       const endDate = moment(startDatetime.setHours(startDatetime.getHours() + duration)).format("YYYY-M-DD HH:mm")
       let scheduleObj = {
@@ -129,17 +147,17 @@ function generateSchedule(appointmentArrayMomentObjects) {
     }
   }
 
-  // appointmentArrayMomentObjects.forEach((appointment) => {
-  //   const startDate = appointment.format("YYYY-M-DD HH:mm")
-  //   const endDate = moment(appointment).utcOffset(0).add(duration, "hours").format("YYYY-M-DD HH:mm")
-  //   let scheduleObj = {
-  //     startDate,
-  //     endDate,
-  //     title: "ご予約不可です",
-  //     available: false
-  //   }
-  //   dynamicSchedule.push(scheduleObj)
-  // })
+  appointmentArrayMomentObjects.forEach((appointment) => {
+    const startDate = appointment.start_at.format("YYYY-M-DD HH:mm")
+    const endDate = moment(appointment.end_at).format("YYYY-M-DD HH:mm")
+    let scheduleObj = {
+      startDate,
+      endDate,
+      title: "ご予約不可です",
+      available: false
+    }
+    dynamicSchedule.push(scheduleObj)
+  })
 
   return dynamicSchedule
 }

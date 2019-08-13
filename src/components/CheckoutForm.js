@@ -20,40 +20,43 @@ class CheckoutForm extends Component {
   }
 
   async submit(ev) {
-    this.setState({ process: true })
+    if (!this.state.process) {
 
-    const fullname = `${this.props.bookingInfo.firstname} ${this.props.bookingInfo.lastname}`
-    const stripToken = await this.props.stripe.createToken({ name: fullname })
-    const errorMessageJp = { 'incomplete_number': "カード番号をご確認ください", 'incomplete_expiry': '有効期限をご確認ください', 'invalid_expiry_year_past': '有効期限をご確認ください', 'incomplete_cvc': 'セキュリティコードをご確認ください' }
+      this.setState({ process: true })
 
-    // input validation errors
-    if (stripToken.error) {
-      this.setState({ process: false })
-      toast.error(<i style={{ fontWeight: 'bold' }}>{errorMessageJp[stripToken.error.code]}</i>)
-    } else {
-      // no validation errors, process
+      const fullname = `${this.props.bookingInfo.firstname} ${this.props.bookingInfo.lastname}`
+      const stripToken = await this.props.stripe.createToken({ name: fullname })
+      const errorMessageJp = { 'incomplete_number': "カード番号をご確認ください", 'incomplete_expiry': '有効期限をご確認ください', 'invalid_expiry_year_past': '有効期限をご確認ください', 'incomplete_cvc': 'セキュリティコードをご確認ください' }
 
-      // hc api url
-      const localhostApi = `http://localhost:3000`
-      const productionApi = 'https://hc-booking-api.herokuapp.com'
-
-      const hcApi = process.env.NODE_ENV === "development" ? localhostApi : productionApi
-
-      const { firstname, lastname, email, phone, content, start_at, end_at, optionId } = this.props.bookingInfo
-
-      let response = await axios.post(`${hcApi}/api/v1/payments`, {
-        tokenId: stripToken.token.id,
-        firstname, lastname, email, phone, content, start_at, end_at, optionId
-      })
-
-      if (response.status === 200) {
-        toast.dismiss()
+      // input validation errors
+      if (stripToken.error) {
         this.setState({ process: false })
-        // redirect to thank you page
-        this.props.history.push('/thankyou')
-      }
-    }
+        toast.error(<i style={{ fontWeight: 'bold' }}>{errorMessageJp[stripToken.error.code]}</i>)
+      } else {
+        // no validation errors, process
 
+        // hc api url
+        const localhostApi = `http://localhost:3000`
+        const productionApi = 'https://hc-booking-api.herokuapp.com'
+
+        const hcApi = process.env.NODE_ENV === "development" ? localhostApi : productionApi
+
+        const { firstname, lastname, email, phone, content, start_at, end_at, optionId } = this.props.bookingInfo
+
+        let response = await axios.post(`${hcApi}/api/v1/payments`, {
+          tokenId: stripToken.token.id,
+          firstname, lastname, email, phone, content, start_at, end_at, optionId
+        })
+
+        if (response.status === 200) {
+          toast.dismiss()
+          this.setState({ process: false })
+          // redirect to thank you page
+          this.props.history.push('/thankyou')
+        }
+      }
+
+    }
   }
 
   render() {
@@ -79,7 +82,7 @@ class CheckoutForm extends Component {
           </label>
         </Grid>
         <Grid item xs={12} style={{ textAlign: 'center' }}>
-          <Button disabled={this.state.process} onClick={this.submit}>{this.state.process ? <BeatLoader color='#fff' /> : "お支払い"}</Button>
+          <Button onClick={this.submit}>{this.state.process ? <BeatLoader color='#fff' /> : "お支払い"}</Button>
 
         </Grid>
       </Grid>

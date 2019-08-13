@@ -78,8 +78,8 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
         </Grid>
 
         <Grid className="mobileToggle" item xs={12} style={{ textAlign: 'right' }}>
-          <div style={{ height: "20px", width: "60px", background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', color: "#fff", padding: "5px", fontWeight: 'bold', display: "inline-block", marginRight: "5px", borderRadius: '4px' }}> 予約可能</div>
-          <div style={{ height: "20px", width: "60px", background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', color: "#fff", padding: "5px", fontWeight: 'bold', display: "inline-block", borderRadius: '4px' }}> 予約不可</div>
+          <div style={{ height: "20px", width: "60px", background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', fontSize: '12px', textAlign: "center", color: "#fff", padding: "5px", fontWeight: 'bold', display: "inline-block", marginRight: "5px", borderRadius: '4px' }}> 予約可能</div>
+          <div style={{ height: "20px", width: "60px", background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', fontSize: '12px', textAlign: "center", color: "#fff", padding: "5px", fontWeight: 'bold', display: "inline-block", borderRadius: '4px' }}> 予約不可</div>
         </Grid>
       </Grid>
       <Scheduler
@@ -104,7 +104,7 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
         <DateNavigator />
         <Appointments appointmentComponent={Appointment} />
       </Scheduler>
-    </Fragment>
+    </Fragment >
   );
 }
 

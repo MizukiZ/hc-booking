@@ -34,3 +34,37 @@ hr {
   transform: translateY(-1px);
   box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
 }
+
+.mobileToggle{
+  display: none;
+}
+
+/* style for less then 767 px width */
+@media screen and (max-width: 768px) {
+  .Cell-text-325 {
+     font-size: 0em !important; 
+  }
+  .VerticalAppointment-title-361{
+    font-size: 0em !important; 
+  }
+
+  .VerticalAppointment-title-341{
+    font-size: 0em !important; 
+  }
+
+  .Cell-dayOfMonth-310{
+    font-size: 1em !important; 
+  }
+
+  .MuiContainer-root{
+    padding:0 !important;
+  }
+
+  .MuiPaper-root {
+    margin: 0px !important;
+  }
+
+  .mobileToggle{
+    display: block;
+  }
+}

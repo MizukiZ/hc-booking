@@ -4,6 +4,7 @@ import {
   Scheduler, WeekView, Appointments, Toolbar, DateNavigator
 } from "@devexpress/dx-react-scheduler-material-ui";
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux'
 import { updateBookingDateTime } from '../store/actions/index'
 import moment from 'moment'
@@ -71,7 +72,16 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
 
   return (
     <Fragment>
-      <Typography color='error' align='center' variant='subtitle2' style={{ minHeight: 25, fontWeight: 'bold' }}>{bookingInfo.submitError && !dateIsSelected ? 'ご希望をお１つお選びください' : ''}</Typography>
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography color='error' align='center' variant='subtitle2' style={{ minHeight: 25, fontWeight: 'bold' }}>{bookingInfo.submitError && !dateIsSelected ? 'ご希望をお１つお選びください' : ''}</Typography>
+        </Grid>
+
+        <Grid className="mobileToggle" item xs={12} style={{ textAlign: 'right' }}>
+          <div style={{ height: "20px", width: "60px", background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', color: "#fff", padding: "5px", fontWeight: 'bold', display: "inline-block", marginRight: "5px", borderRadius: '4px' }}> 予約可能</div>
+          <div style={{ height: "20px", width: "60px", background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', color: "#fff", padding: "5px", fontWeight: 'bold', display: "inline-block", borderRadius: '4px' }}> 予約不可</div>
+        </Grid>
+      </Grid>
       <Scheduler
         data={scheduleData}
         height={600}

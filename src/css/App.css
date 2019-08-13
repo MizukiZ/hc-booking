@@ -44,15 +44,27 @@ hr {
   .Cell-text-325 {
      font-size: 0em !important; 
   }
+
   .VerticalAppointment-title-361{
+    font-size: 0em !important; 
+  }
+
+  .jss361{
     font-size: 0em !important; 
   }
 
   .VerticalAppointment-title-341{
     font-size: 0em !important; 
   }
+  .jss325{
+    font-size: 0em !important; 
+  }
 
   .Cell-dayOfMonth-310{
+    font-size: 1em !important; 
+  }
+
+  .jss310{
     font-size: 1em !important; 
   }
 

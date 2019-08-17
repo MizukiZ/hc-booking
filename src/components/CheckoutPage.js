@@ -8,7 +8,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import SectionTitle from './SectionTitle'
 import { withRouter } from "react-router-dom"
 import { connect } from 'react-redux';
@@ -19,7 +18,7 @@ class CheckoutPage extends React.Component {
 
   render() {
     const { options } = this.props
-    const { firstname, lastname, email, phone, optionId, start_at, end_at, content } = this.props.bookingInfo
+    const { firstname, lastname, email, phone, optionId, start_at } = this.props.bookingInfo
 
     return (
       <StripeProvider apiKey="pk_test_0iLQxnoMSnz8brNv1VplvgY1">

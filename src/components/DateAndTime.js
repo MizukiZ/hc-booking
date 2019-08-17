@@ -4,7 +4,6 @@ import {
   Scheduler, WeekView, Appointments, Toolbar, DateNavigator
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { withStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -18,7 +17,7 @@ import { updateBookingDateTime } from '../store/actions/index'
 import moment from 'moment'
 
 
-function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
+function DateAndTime({ options, updateDateTime, settings, bookingInfo, appointments }) {
 
   const [currentDate, currentDateChange] = useState(new Date())
   const [dateIsSelected, dateIsSelectedChange] = useState(false)
@@ -29,12 +28,8 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
   ) : []
 
 
-  const originalscheduleData = generateSchedule(appointmentDateArray)
-  let [scheduleData, updatescheduleData] = useState(generateSchedule(appointmentDateArray))
-
-  function handleClickOpen() {
-    setOpen(true);
-  }
+  const originalscheduleData = generateSchedule(appointmentDateArray, settings)
+  let [scheduleData, updatescheduleData] = useState(generateSchedule(appointmentDateArray, settings))
 
   function handleClose() {
     setOpen(false);
@@ -145,11 +140,11 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
         />
         <WeekView
           // detemine which days to show (zero based. 0-Sunday 6-Saturday)
-          excludedDays={[4, 6]}
+          excludedDays={JSON.parse(settings.days_availability)}
           // set start time from admin setting
-          startDayHour={10}
+          startDayHour={Number(settings.start_time.split(":")[0])}
           // set end time from admin setting
-          endDayHour={19}
+          endDayHour={Number(settings.end_time.split(":")[0])}
           dayScaleCellComponent={DayScaleCell}
         />
         <Toolbar />
@@ -160,13 +155,13 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
   );
 }
 
-function generateSchedule(appointmentArrayMomentObjects) {
+function generateSchedule(appointmentArrayMomentObjects, settings) {
+
   let dynamicSchedule = []
   const tomorrow = moment().add(1, 'day').format("YYYY-MM-DD")
-  const startTime = "10:00"
-  const endTime = 19
-  const duration = 2
-  const interval = 15
+  const startTime = settings.start_time
+  const duration = settings.duration / 60  // minutes to hours
+  const interval = settings.interval
 
   let startDatetime = new Date(tomorrow + "T" + startTime)
   for (let i = 1; i < 25; i++) {
@@ -185,7 +180,7 @@ function generateSchedule(appointmentArrayMomentObjects) {
       }
     })
 
-    if (startDatetime.getHours() + duration >= 19) {
+    if (startDatetime.getHours() + duration >= Number(settings.end_time.split(":")[0])) {
       // next day with set start time
       startDatetime.setDate(startDatetime.getDate() + 1)
       const nextDateStr = moment(startDatetime).format("YYYY-MM-DD")
@@ -226,6 +221,7 @@ function generateSchedule(appointmentArrayMomentObjects) {
 
 const mapStateToProps = function (state) {
   return {
+    settings: state.settings,
     bookingInfo: state.bookingInfo,
     appointments: state.appointments
   }

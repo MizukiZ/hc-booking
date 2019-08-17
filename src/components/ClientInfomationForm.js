@@ -14,7 +14,7 @@ function ClientInfomationForm(props) {
     }
   }
 
-  const { firstname, lastname, email, phone, optionId, start_at, end_at, content, submitError } = props.bookingInfo
+  const { firstname, lastname, email, phone, content, submitError } = props.bookingInfo
 
   return (
     <Grid

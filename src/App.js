@@ -8,7 +8,7 @@ import DateAndTime from './components/DateAndTime'
 import ClientInfomationForm from './components/ClientInfomationForm'
 import CheckoutPage from './components/CheckoutPage'
 import ThankYouPage from './components/ThankYouPage'
-import { fetchOptionsDataFromApi, fetchAppointmentsDataFromApi, updateSubmitFormError } from './store/actions/index'
+import { fetchOptionsDataFromApi, fetchAppointmentsDataFromApi, updateSubmitFormError, fetchSettingsDataFromApi } from './store/actions/index'
 
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
@@ -36,7 +36,7 @@ class App extends Component {
               <SectionTitle title={"オプション"} />
               {this.props.options && <OptionCards options={this.props.options} />}
               <SectionTitle title={"日程"} />
-              <DateAndTime />
+              {this.props.settings && <DateAndTime />}
 
               <Grid style={{ margin: 20 }}>
                 <Grid item style={{ textAlign: 'center' }}>
@@ -89,6 +89,7 @@ class App extends Component {
   componentDidMount() {
     //initial fetch options
     this.props.fetchOptions()
+    this.props.fetchSettings()
     this.props.fetchAppointments()
   }
 }
@@ -96,6 +97,7 @@ class App extends Component {
 const mapStateToProps = function (state) {
   return {
     options: state.options,
+    settings: state.settings,
     appointments: state.appointments,
     submitError: state.bookingInfo.submitError,
     formIsCompleted: state.bookingInfo.formIsCompleted
@@ -105,6 +107,7 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = dispatch => {
   return {
     fetchOptions: () => dispatch(fetchOptionsDataFromApi()),
+    fetchSettings: () => dispatch(fetchSettingsDataFromApi()),
     fetchAppointments: () => dispatch(fetchAppointmentsDataFromApi()),
     updateSubmitState: () => dispatch(updateSubmitFormError())
   }

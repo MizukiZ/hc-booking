@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { CardNumberElement, CardExpiryElement, CardCvcElement, injectStripe } from 'react-stripe-elements';
 import { connect } from 'react-redux'
 import axios from "axios"
-import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { withRouter } from "react-router-dom"
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import BeatLoader from 'react-spinners/BeatLoader';

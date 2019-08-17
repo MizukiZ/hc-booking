@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography'
 import { resetSubmitForm } from '../store/actions/index'
@@ -20,6 +19,7 @@ function ThankYouPage(props) {
       <Grid container>
         <Grid item xs={12} style={{ textAlign: 'center', marginBottom: '3em' }}>
           <img
+            alt={"logo.."}
             src={require('../images/logo.png')}
           />
         </Grid>

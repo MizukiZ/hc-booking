@@ -3,8 +3,16 @@ import { ViewState } from '@devexpress/dx-react-scheduler';
 import {
   Scheduler, WeekView, Appointments, Toolbar, DateNavigator
 } from "@devexpress/dx-react-scheduler-material-ui";
+import { withStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux'
 import { updateBookingDateTime } from '../store/actions/index'
 import moment from 'moment'
@@ -12,9 +20,10 @@ import moment from 'moment'
 
 function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
 
-  let [currentDate, currentDateChange] = useState(new Date())
-  let [dateIsSelected, dateIsSelectedChange] = useState(false)
-
+  const [currentDate, currentDateChange] = useState(new Date())
+  const [dateIsSelected, dateIsSelectedChange] = useState(false)
+  const [selectedData, setSelectedData] = useState(null)
+  const [open, setOpen] = React.useState(false);
   // crete array of appointment datetimes (moment object)
   const appointmentDateArray = appointments ? appointments.map((a) => { return { start_at: moment(moment(a.start_at).utcOffset(0).format("YYYY-M-DD HH:mm")), end_at: moment(moment(a.end_at).utcOffset(0).format("YYYY-M-DD HH:mm")) } }
   ) : []
@@ -22,6 +31,32 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
 
   const originalscheduleData = generateSchedule(appointmentDateArray)
   let [scheduleData, updatescheduleData] = useState(generateSchedule(appointmentDateArray))
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
+  function setAppointment() {
+    // update redux value
+    updateDateTime({ start_at: selectedData.startDate, end_at: selectedData.endDate })
+    // remove chosen schedule from scheduleData
+    let filterdscheduleData = originalscheduleData.filter((ap) => {
+      return JSON.stringify(ap) !== JSON.stringify(selectedData)
+    })
+
+    // bring back the chosen schdule with selected true attr
+    selectedData["selected"] = true
+    const finalizedscheduleData = [...filterdscheduleData, selectedData]
+    // update schedule data
+    updatescheduleData(finalizedscheduleData)
+    dateIsSelectedChange(true)
+
+    handleClose()
+  }
 
   const Appointment = ({
     children, style, ...restProps
@@ -48,20 +83,8 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
           if (!children[1].props.data.selected && children[1].props.data.available) {
             // click event for appointment comp
 
-            let apData = children[1].props.data
-            // update redux value
-            updateDateTime({ start_at: apData.startDate, end_at: apData.endDate })
-            // remove chosen schedule from scheduleData
-            let filterdscheduleData = originalscheduleData.filter((ap) => {
-              return JSON.stringify(ap) !== JSON.stringify(apData)
-            })
-
-            // bring back the chosen schdule with selected true attr
-            apData["selected"] = true
-            const finalizedscheduleData = [...filterdscheduleData, apData]
-            // update schedule data
-            updatescheduleData(finalizedscheduleData)
-            dateIsSelectedChange(true)
+            setSelectedData(children[1].props.data)
+            setOpen(true)
           }
         }}
       >
@@ -70,8 +93,36 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
     )
   };
 
+  const DayScaleCellBase = ({ classes, ...restProps }) => {
+    return <WeekView.DayScaleCell {...restProps} className='DayTitle' />;
+  };
+
+  const DayScaleCell = withStyles(null, { name: 'DayScaleCell' })(DayScaleCellBase);
+
   return (
     <Fragment>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">詳細</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {selectedData && `${moment(selectedData.startDate).format("YYYY年M月D日 HH時mm分")} - ${moment(selectedData.endDate).format("HH時mm分")}`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+          <Button onClick={setAppointment} color="primary" autoFocus>
+            Select
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Grid container>
         <Grid item xs={12}>
           <Typography color='error' align='center' variant='subtitle2' style={{ minHeight: 25, fontWeight: 'bold' }}>{bookingInfo.submitError && !dateIsSelected ? 'ご希望をお１つお選びください' : ''}</Typography>
@@ -99,6 +150,7 @@ function DateAndTime({ options, updateDateTime, bookingInfo, appointments }) {
           startDayHour={10}
           // set end time from admin setting
           endDayHour={19}
+          dayScaleCellComponent={DayScaleCell}
         />
         <Toolbar />
         <DateNavigator />
@@ -147,7 +199,7 @@ function generateSchedule(appointmentArrayMomentObjects) {
       let scheduleObj = {
         startDate,
         endDate,
-        title: "ご予約可能です",
+        title: "予約可能",
         available: true
       }
 
@@ -163,7 +215,7 @@ function generateSchedule(appointmentArrayMomentObjects) {
     let scheduleObj = {
       startDate,
       endDate,
-      title: "ご予約不可です",
+      title: "予約不可",
       available: false
     }
     dynamicSchedule.push(scheduleObj)

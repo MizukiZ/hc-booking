@@ -163,8 +163,13 @@ function generateSchedule(appointmentArrayMomentObjects, settings) {
   const duration = settings.duration / 60  // minutes to hours
   const interval = settings.interval
 
+  const excludedDays = settings ? JSON.parse(settings.days_availability).map((d) => {
+    if (d == 0) return 7
+    return d
+  }) : []
+
   let startDatetime = new Date(tomorrow + "T" + startTime)
-  for (let i = 1; i < 25; i++) {
+  for (let i = 1; i < 30; i++) {
     let isOverrap = false;
     const startDate = moment(startDatetime).format("YYYY-M-DD HH:mm")
 
@@ -179,8 +184,16 @@ function generateSchedule(appointmentArrayMomentObjects, settings) {
         isOverrap = true
       }
     })
+    if (excludedDays.includes(moment(startDatetime).isoWeekday())) {
+      // next day with set start time
+      startDatetime.setDate(startDatetime.getDate() + 1)
+      const nextDateStr = moment(startDatetime).format("YYYY-MM-DD")
+      startDatetime = new Date(nextDateStr + "T" + startTime)
 
-    if (startDatetime.getHours() + duration >= Number(settings.end_time.split(":")[0])) {
+      continue
+    }
+    else if (startDatetime.getHours() + duration >= Number(settings.end_time.split(":")[0])) {
+      // exceed the end time
       // next day with set start time
       startDatetime.setDate(startDatetime.getDate() + 1)
       const nextDateStr = moment(startDatetime).format("YYYY-MM-DD")
@@ -205,17 +218,19 @@ function generateSchedule(appointmentArrayMomentObjects, settings) {
   }
 
   appointmentArrayMomentObjects.forEach((appointment) => {
-    const startDate = appointment.start_at.format("YYYY-M-DD HH:mm")
-    const endDate = moment(appointment.end_at).format("YYYY-M-DD HH:mm")
-    let scheduleObj = {
-      startDate,
-      endDate,
-      title: "予約不可",
-      available: false
-    }
-    dynamicSchedule.push(scheduleObj)
-  })
 
+    if (!excludedDays.includes(appointment.start_at.isoWeekday())) {
+      const startDate = appointment.start_at.format("YYYY-M-DD HH:mm")
+      const endDate = moment(appointment.end_at).format("YYYY-M-DD HH:mm")
+      let scheduleObj = {
+        startDate,
+        endDate,
+        title: "予約不可",
+        available: false
+      }
+      dynamicSchedule.push(scheduleObj)
+    }
+  })
   return dynamicSchedule
 }
 

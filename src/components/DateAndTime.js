@@ -219,7 +219,7 @@ function generateSchedule(appointmentArrayMomentObjects, settings) {
 
   appointmentArrayMomentObjects.forEach((appointment) => {
 
-    if (!excludedDays.includes(appointment.start_at.isoWeekday())) {
+    if (!excludedDays.includes(appointment.start_at.isoWeekday()) && appointment.start_at >= new Date(tomorrow)) {
       const startDate = appointment.start_at.format("YYYY-M-DD HH:mm")
       const endDate = moment(appointment.end_at).format("YYYY-M-DD HH:mm")
       let scheduleObj = {
